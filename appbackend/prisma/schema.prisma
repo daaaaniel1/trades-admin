@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int               @id @default(autoincrement())
+  email           String            @unique
+  passwordHash    String
+  createdAt       DateTime          @default(now())
+  businessProfile BusinessProfile?
+  incomeEntries   IncomeEntry[]
+  expenseEntries  ExpenseEntry[]
+  passwordResetTokens PasswordResetToken[]
+}
+
+model BusinessProfile {
+  id                 Int    @id @default(autoincrement())
+  userId             Int    @unique
+  businessName       String
+  tradeType          String // e.g. "plumber"
+  weeklyTargetIncome Float  // how much they want to earn per week
+  taxRate            Float  // 0.2 = 20%
+  fixedWeeklyCosts   Float  // sum of fixed costs
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model IncomeEntry {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  date         DateTime
+  amount       Float
+  customerName String?   // optional
+  description  String?   // optional
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model ExpenseEntry {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  date            DateTime
+  amount          Float
+  supplierName    String?
+  description     String?   // ✅ ADD THIS
+  category        String?
+  receiptImageUrl String?
+  createdAt       DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  tokenHash String
+  userId    Int
+  expiresAt DateTime
+  used      Boolean  @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([tokenHash])
+}

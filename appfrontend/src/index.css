@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+input {
+  height: 48px;
+}
+
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0 12px;
+}
