@@ -54,3 +54,22 @@ Local and production kept in sync manually.
 - SSH: Mac terminal → ssh daniel@<server-ip>
 - No root login
 - Docker group enabled for daniel
+
+## Caddy routing (IMPORTANT)
+
+Use `handle`, NOT `handle_path`.
+
+Reason:
+`handle_path` strips the URL prefix and breaks Express routes
+(e.g. /auth/login becomes /login → 404).
+
+Current working pattern:
+
+- /auth/*
+- /dashboard*
+- /income*
+- /expenses*
+- /settings*
+
+All reverse_proxy → backend (3000)
+Fallback → frontend (8080)
