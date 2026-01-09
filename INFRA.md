@@ -73,3 +73,48 @@ Current working pattern:
 
 All reverse_proxy → backend (3000)
 Fallback → frontend (8080)
+
+## Production – Final Frozen State (2026-01-08)
+
+### Domains
+- jobadmin.co.uk
+- www.jobadmin.co.uk
+
+### Reverse Proxy (Caddy)
+- Hosts: jobadmin.co.uk, www.jobadmin.co.uk
+- Routing:
+  - /api/*      → backend (localhost:3000)
+  - /health     → backend (localhost:3000)
+  - all others  → frontend (localhost:8080)
+- TLS: handled by Caddy (Let’s Encrypt), Cloudflare in front
+
+### Frontend
+- Docker image: production-frontend:api
+- Stack: Vite + React + nginx
+- nginx SPA fallback enabled:
+  - try_files $uri $uri/ /index.html;
+- API base baked at build time:
+  - VITE_API_BASE_URL=/api
+- Port mapping: 8080 → 80
+
+### Backend
+- Docker image: production-backend:api
+- Stack: Node.js + Express + Prisma
+- Routes mounted under /api/*
+- Prisma client generated inside Docker build (linux-musl)
+- Port mapping: 3000 → 3000
+- Database:
+  - SQLite
+  - Host: /home/daniel/apps/trades-admin/production/data/sqlite
+  - Container: /app/data
+  - DATABASE_URL=file:/app/data/dev.db
+
+### Containers (running)
+- trades_admin_frontend → production-frontend:api
+- trades_admin_backend  → production-backend:api
+
+### Notes (Do Not Break)
+- Do not hot-edit containers
+- Any frontend change requires rebuilding the frontend image
+- Any backend change requires rebuilding the backend image
+- Caddy config is frozen unless domains or ports change
