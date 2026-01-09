@@ -18,6 +18,9 @@ if (res.status === 401 || res.status === 403) {
   // Non-destructive auth handling:
   // - keep token
   // - let caller decide what to do
+  if (window.__onAuthRequired) {
+    window.__onAuthRequired();
+  }
   const err = new Error("Authentication required");
   err.code = "AUTH_REQUIRED";
   throw err;
