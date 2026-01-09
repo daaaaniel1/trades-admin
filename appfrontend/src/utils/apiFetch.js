@@ -14,12 +14,14 @@ export async function apiFetch(path, options = {}) {
   });
 
   if (!res.ok) {
-    if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-      throw new Error("Authentication required");
-    }
-
+if (res.status === 401 || res.status === 403) {
+  // Non-destructive auth handling:
+  // - keep token
+  // - let caller decide what to do
+  const err = new Error("Authentication required");
+  err.code = "AUTH_REQUIRED";
+  throw err;
+}
     let msg = "Request failed";
     try {
       const data = await res.json();

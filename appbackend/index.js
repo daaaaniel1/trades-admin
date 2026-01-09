@@ -37,13 +37,13 @@ app.get("/health", (req, res) => {
 });
 
 /**
- * Routes
+ * Routes (API namespace)
  */
-app.use("/auth", require("./routes/auth"));
-app.use("/income", require("./routes/income"));
-app.use("/expenses", require("./routes/expenses"));
-app.use("/dashboard", require("./routes/dashboard"));
-app.use("/settings", require("./routes/settings"));
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/income", require("./routes/income"));
+app.use("/api/expenses", require("./routes/expenses"));
+app.use("/api/dashboard", require("./routes/dashboard"));
+app.use("/api/settings", require("./routes/settings"));
 
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
