@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 export default function Login() {
+const authExpired =
+  typeof window !== "undefined" &&
+  window.location.search.includes("reason=expired");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -51,7 +54,17 @@ export default function Login() {
         <h1 className="text-xl font-bold mb-4 text-center">
           Sign in to your account
         </h1>
-
+{authExpired && (
+  <div style={{
+    marginBottom: "12px",
+    padding: "12px",
+    background: "#fee2e2",
+    color: "#991b1b",
+    textAlign: "center",
+  }}>
+    Your session has expired. Please sign in again.
+  </div>
+)}
         {error && (
           <p className="text-red-500 text-sm mb-3 text-center">{error}</p>
         )}
