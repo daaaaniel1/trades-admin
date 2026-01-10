@@ -4,6 +4,7 @@ const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
 
 const app = express();
+app.set("trust proxy", true);
 const prisma = new PrismaClient();
 
 /**

@@ -5,6 +5,9 @@ const authLimiter = rateLimit({
   max: 20,                 // 20 attempts per IP
   standardHeaders: true,
   legacyHeaders: false,
+
+  // REQUIRED when behind Caddy / reverse proxy
+  trustProxy: true,
 });
 
 module.exports = { authLimiter };
