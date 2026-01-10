@@ -132,3 +132,15 @@ If DB is corrupted:
 - Never hotfix on server
 - Infra changes must be written in INFRA.md first
 - If unsure: STOP and diagnose
+
+---
+
+## Production runtime (frozen)
+
+Frontend:
+- Container: trades_admin_frontend
+- Image: production-frontend:api
+
+Backend:
+- Container: trades_admin_backend
+- Image: production-backend:api
