@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { authLimiter } = require("../middleware/rateLimit");
 const router = express.Router();
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /* ======================
    REGISTER
@@ -154,8 +156,22 @@ router.post("/password-reset/request", authLimiter, async (req, res) => {
       },
     });
 
-    // TEMP: return token for now (later this becomes email-only)
-    res.json({ ok: true, token });
+  const resetLink = `https://jobadmin.co.uk/password-reset/${token}`;
+
+await resend.emails.send({
+  from: "JobAdmin <no-reply@jobadmin.co.uk>",
+  to: email,
+  subject: "Reset your JobAdmin password",
+  html: `
+    <p>You requested a password reset.</p>
+    <p>
+      <a href="${resetLink}">Click here to reset your password</a>
+    </p>
+    <p>This link expires in 30 minutes.</p>
+  `,
+});
+
+res.json({ ok: true });
   } catch (err) {
     console.error("PASSWORD RESET REQUEST ERROR:", err);
     res.status(500).json({ error: "Server error" });
