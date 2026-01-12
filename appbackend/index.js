@@ -40,6 +40,15 @@ app.get("/health", (req, res) => {
 /**
  * Routes (API namespace)
  */
+app.use((req, res, next) => {
+  if (["POST", "PUT", "DELETE"].includes(req.method)) {
+    const auth = req.headers.authorization;
+    if (!auth) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+  }
+  next();
+});
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/income", require("./routes/income"));
 app.use("/api/expenses", require("./routes/expenses"));
