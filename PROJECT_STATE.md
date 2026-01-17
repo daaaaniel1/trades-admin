@@ -50,6 +50,56 @@ PROJECT STATE GOVERNANCE (PERMANENT)
 - No undocumented changes are valid
 - If not committed, it does not exist
 
+DECISION — FRONTEND DEPLOYMENT SIMPLIFICATION (PROPOSED)
+
+Reason:
+- Frontend-only bugs require full Docker rebuild + Portainer intervention
+- This is too costly for solo development and stabilisation
+
+Proposal:
+- Frontend served as static build via Caddy
+- Docker/Portainer retained for backend only
+
+Status:
+- Proposed, not executed
+- Requires explicit approval before changes
+
+FRONTEND DEPLOYMENT — ORIGINAL RATIONALE
+
+- Docker/Portainer chosen to standardise runtime environment
+- Intended to mirror future CI/CD pipeline
+- Intended to isolate frontend build from server OS
+- Assumed frequent image rebuilds would be acceptable
+- Assumed Portainer UI would reduce operational risk
+
+FRONTEND DEPLOYMENT — CURRENT CONSTRAINTS
+
+- Solo developer, no CI/CD pipeline
+- High iteration frequency on frontend UI
+- Docker image rebuild + Portainer update too slow for stabilisation
+- Difficult to verify what code is actually running
+- Debugging effort disproportionate to change size
+- Increases cognitive load and error risk
+
+FRONTEND DEPLOYMENT — PROPOSED TRANSITION PLAN
+
+Goal:
+- Reduce deployment complexity during stabilisation
+- Preserve rollback path
+
+Plan:
+1. Keep backend Docker/Portainer unchanged
+2. Remove frontend container only
+3. Build frontend locally (Vite build)
+4. Serve static frontend via Caddy
+5. Verify parity with current production
+6. Keep Docker-based frontend as rollback option
+
+Risk mitigation:
+- One-session execution
+- Immediate rollback possible
+- No backend or database changes
+
 FIX LOG
 
 [2026-01-17]
