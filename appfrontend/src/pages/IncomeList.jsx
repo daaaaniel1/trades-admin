@@ -272,7 +272,7 @@ highlightTimeoutRef.current = setTimeout(() => {
             editIncome?.id
               ? {
                   amount: editIncome.amount,
-                  name: editIncome.customerName,   // ← THIS is the fix
+                  customerName: editIncome.customerName, // ← must match nameField
                   description: editIncome.description,
                   date: editIncome.date,
                 }
