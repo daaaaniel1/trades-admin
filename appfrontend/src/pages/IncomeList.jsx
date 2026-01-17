@@ -272,7 +272,7 @@ highlightTimeoutRef.current = setTimeout(() => {
             editIncome?.id
               ? {
                   amount: editIncome.amount,
-                  customerName: editIncome.customerName,
+                  name: editIncome.customerName,   // ← THIS is the fix
                   description: editIncome.description,
                   date: editIncome.date,
                 }
