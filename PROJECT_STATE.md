@@ -60,5 +60,15 @@ Fix: initialData now includes customerName and description
 Verification: Static inspection (local backend unavailable)
 Status: FIXED — VERIFIED BY INSPECTION
 
+[2026-01-17]
+Issue: Backend failed to start locally
+Scope: Local environment only
+Cause 1: Invalid option `trustProxy` in express-rate-limit configuration
+Fix 1: Removed unsupported `trustProxy` option from rateLimit middleware
+Cause 2: Resend client instantiated without API key at import time
+Fix 2: Guarded Resend initialization so backend starts without RESEND_API_KEY
+Verification: Local backend starts via `npm run dev`
+Status: FIXED — LOCAL STARTABILITY RESTORED
+
 LAST VERIFIED DATE
 	•	2026-01-17
